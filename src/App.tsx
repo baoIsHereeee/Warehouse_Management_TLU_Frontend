@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import LoginPage from "./pages/Login/Login";
 import Navbar from "./components/Navbar";
 import ProductsPage from "./pages/Product/ProductList";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -22,9 +23,11 @@ function App() {
         <Route
           path="/products"
           element={
-            <LayoutWithNavbar>
-              <ProductsPage />
-            </LayoutWithNavbar>
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <ProductsPage />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
           }
         />
 
