@@ -13,11 +13,12 @@ import {
   Snackbar,
   Alert,
   IconButton,
+  MenuItem,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProductById, updateProduct, deleteProduct } from '../../services/Product/product.service';
+import { getProductById, updateProduct, deleteProduct, getCategories } from '../../services/Product/product.service';
 
 const DEFAULT_IMAGE = 'https://res.cloudinary.com/dw3x8orox/image/upload/v1747628006/b170870007dfa419295d949814474ab2_t_p4cjjq.jpg';
 
@@ -26,6 +27,7 @@ const ProductDetail: React.FC = () => {
   const navigate = useNavigate();
 
   const [product, setProduct] = useState<any>(null);
+  const [categories, setCategories] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -33,6 +35,7 @@ const ProductDetail: React.FC = () => {
     sellingPrice: '',
     minimumStock: '',
     orderStock: '',
+    categoryId: '',
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -44,26 +47,33 @@ const ProductDetail: React.FC = () => {
   });
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchData = async () => {
       try {
         const accessToken = localStorage.getItem('accessToken');
-        if (!id) throw new Error('No product id provided');
-        const data = await getProductById(id, accessToken);
-        setProduct(data);
+        if (!id || !accessToken) throw new Error('Missing required data');
+
+        const [productData, categoriesData] = await Promise.all([
+          getProductById(id, accessToken),
+          getCategories(accessToken)
+        ]);
+
+        setProduct(productData);
+        setCategories(categoriesData);
         setFormData({
-          name: data.name || '',
-          description: data.description || '',
-          currentStock: data.currentStock?.toString() || '0',
-          sellingPrice: data.sellingPrice?.toString() || '',
-          minimumStock: data.minimumStock?.toString() || '',
-          orderStock: data.orderStock?.toString() || '',
+          name: productData.name || '',
+          description: productData.description || '',
+          currentStock: productData.currentStock?.toString() || '0',
+          sellingPrice: productData.sellingPrice?.toString() || '',
+          minimumStock: productData.minimumStock?.toString() || '',
+          orderStock: productData.orderStock?.toString() || '',
+          categoryId: productData.category?.id || '',
         });
       } catch (err: any) {
-        setError(err.message || 'Failed to load product');
+        setError(err.message || 'Failed to load data');
       }
     };
 
-    fetchProduct();
+    fetchData();
   }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,8 +103,9 @@ const ProductDetail: React.FC = () => {
       if (selectedImage) {
         formDataToSend.append('image', selectedImage);
       } else if (!product.image) {
-        formDataToSend.append('image', ''); 
+        formDataToSend.append('image', '');
       }
+      formDataToSend.append('categoryId', formData.categoryId || '');
 
       await updateProduct(id, formDataToSend, accessToken);
       setSnackbar({
@@ -145,7 +156,7 @@ const ProductDetail: React.FC = () => {
   if (!product) return <Container sx={{ mt: 4 }}>Loading...</Container>;
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" gutterBottom>
         Product Details: {product.name}
       </Typography>
@@ -250,6 +261,24 @@ const ProductDetail: React.FC = () => {
             onChange={handleChange}
           />
         )}
+        <TextField
+          select
+          label="Category"
+          name="categoryId"
+          value={formData.categoryId}
+          onChange={handleChange}
+          error={false}
+          helperText="Optional"
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {categories.map((cat) => (
+            <MenuItem key={cat.id} value={cat.id}>
+              {cat.name}
+            </MenuItem>
+          ))}
+        </TextField>
 
         <Box display="flex" gap={2}>
           <Button 

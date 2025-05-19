@@ -82,14 +82,6 @@ const CreateProduct: React.FC = () => {
       });
       return false;
     }
-    if (!formData.categoryId) {
-      setSnackbar({
-        open: true,
-        message: 'Category is required',
-        severity: 'error',
-      });
-      return false;
-    }
     if (!formData.sellingPrice || Number(formData.sellingPrice) <= 0) {
       setSnackbar({
         open: true,
@@ -263,10 +255,12 @@ const CreateProduct: React.FC = () => {
           name="categoryId"
           value={formData.categoryId}
           onChange={handleChange}
-          required
-          error={!formData.categoryId}
-          helperText={!formData.categoryId ? "Category is required" : ""}
+          error={false}
+          helperText="Optional"
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
           {categories.map((cat: any) => (
             <MenuItem key={cat.id} value={cat.id}>
               {cat.name}
