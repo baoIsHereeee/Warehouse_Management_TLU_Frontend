@@ -73,3 +73,66 @@ export const getCategories = async (accessToken: string | null) => {
 
   return response.data;
 };
+
+export const getProductById = async (id: string, accessToken: string | null) => {
+  if (!accessToken) {
+    throw new Error('No access token provided');
+  }
+
+  const response = await axios.get(`http://localhost:3000/products/${id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return response.data;
+};
+
+export const updateProduct = async (
+  id: string,
+  productData: any,
+  accessToken: string | null
+) => {
+  if (!accessToken) {
+    throw new Error('No access token provided');
+  }
+
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/products/${id}`,
+      productData,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const message =
+        error.response.data.message || 'Something went wrong from server';
+      if (Array.isArray(message)) {
+        throw new Error(message.join('\n'));
+      }
+      throw new Error(message);
+    }
+
+    throw new Error(error.message || 'Unknown error');
+  }
+};
+
+export const deleteProduct = async (id: string, token?: string) => {
+  const response = await fetch(`http://localhost:3000/products/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to delete product');
+  }
+};

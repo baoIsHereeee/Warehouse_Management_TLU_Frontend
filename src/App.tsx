@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import ProductsPage from "./pages/Product/ProductList";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import CreateProduct from "./pages/Product/CreateProduct";
+import ProductDetail from "./pages/Product/ProductDetail";
+
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
     <Navbar />
@@ -37,6 +39,17 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <CreateProduct />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/products/:id"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <ProductDetail />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }
