@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
@@ -10,8 +11,10 @@ import {
   Paper,
   InputAdornment,
   IconButton,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { loginService } from "../../services/Login/login.service";
 
 interface IFormInput {
   email: string;
@@ -19,7 +22,9 @@ interface IFormInput {
 }
 
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string>("");
   const {
     register,
     handleSubmit,
@@ -28,8 +33,14 @@ const LoginPage: React.FC = () => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log("Login data:", data);
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+      setError("");
+      await loginService.signIn(data.email, data.password);
+      navigate("/products"); 
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to sign in. Please try again.");
+    }
   };
 
   return (
@@ -56,6 +67,11 @@ const LoginPage: React.FC = () => {
         <Typography variant="h5" component="h1" gutterBottom>
           Warehouse Management
         </Typography>
+        {error && (
+          <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
+            {error}
+          </Alert>
+        )}
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
