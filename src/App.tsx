@@ -4,7 +4,7 @@ import LoginPage from "./pages/Login/Login";
 import Navbar from "./components/Navbar";
 import ProductsPage from "./pages/Product/ProductList";
 import ProtectedRoute from "./components/ProtectedRoutes";
-
+import CreateProduct from "./pages/Product/CreateProduct";
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
     <Navbar />
@@ -26,6 +26,17 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <ProductsPage />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/products/create"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <CreateProduct />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }
