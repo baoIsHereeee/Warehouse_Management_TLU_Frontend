@@ -2,11 +2,11 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/Login/Login";
 import Navbar from "./components/Navbar";
-import ProductsPage from "./pages/Product/ProductList";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import CreateProduct from "./pages/Product/CreateProduct";
 import ProductDetail from "./pages/Product/ProductDetail";
-
+import CategoryList from "./pages/Category/CategoryList";
+import Products from "./pages/Product/ProductList";
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
     <Navbar />
@@ -27,7 +27,7 @@ function App() {
           element={
             <ProtectedRoute>
               <LayoutWithNavbar>
-                <ProductsPage />
+                <Products />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }
@@ -50,6 +50,17 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <ProductDetail />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/categories"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <CategoryList />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }

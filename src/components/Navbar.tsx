@@ -19,6 +19,10 @@ const Navbar: React.FC = () => {
             Warehouse Management
           </Typography>
 
+          <Button color="inherit" component={Link} to="/categories">
+            Category
+          </Button>
+
           <Button color="inherit" component={Link} to="/products">
             Product
           </Button>
