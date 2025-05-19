@@ -12,10 +12,10 @@ import {
   DialogActions,
   Snackbar,
   Alert,
-//   IconButton,
+  IconButton,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-// import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProductById, updateProduct, deleteProduct } from '../../services/Product/product.service';
 
@@ -81,7 +81,7 @@ const ProductDetail: React.FC = () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
       if (!id || !accessToken) throw new Error('Missing required data');
-  
+
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
       formDataToSend.append('description', formData.description);
@@ -92,8 +92,10 @@ const ProductDetail: React.FC = () => {
       }
       if (selectedImage) {
         formDataToSend.append('image', selectedImage);
+      } else if (!product.image) {
+        formDataToSend.append('image', ''); 
       }
-  
+
       await updateProduct(id, formDataToSend, accessToken);
       setSnackbar({
         open: true,
@@ -107,7 +109,7 @@ const ProductDetail: React.FC = () => {
         severity: 'error'
       });
     }
-  };  
+  };
 
   const handleDelete = async () => {
     try {
@@ -128,6 +130,15 @@ const ProductDetail: React.FC = () => {
         severity: 'error'
       });
     }
+  };
+
+  const handleRemoveImage = () => {
+    setProduct((prev: typeof product) => ({ ...prev, image: null }));
+    setSnackbar({
+      open: true,
+      message: 'Image Removed!',
+      severity: 'info'
+    });
   };
 
   if (error) return <Container sx={{ mt: 4 }}><Alert severity="error">{error}</Alert></Container>;
@@ -152,16 +163,9 @@ const ProductDetail: React.FC = () => {
             backgroundColor: '#f5f5f5',
           }}
         />
-        {/* {product.image && !selectedImage && (
+        {product.image && !selectedImage && (
           <IconButton
-            onClick={() => {
-              setProduct(prev => ({ ...prev, image: null }));
-              setSnackbar({
-                open: true,
-                message: 'Image removed successfully',
-                severity: 'success'
-              });
-            }}
+            onClick={handleRemoveImage}
             sx={{
               position: 'absolute',
               top: 8,
@@ -174,7 +178,7 @@ const ProductDetail: React.FC = () => {
           >
             <DeleteIcon color="error" />
           </IconButton>
-        )} */}
+        )}
       </Box>
 
       <Box mb={2} display="flex" justifyContent="center" alignItems="center">
@@ -310,7 +314,7 @@ const ProductDetail: React.FC = () => {
 
       <Snackbar 
         open={snackbar.open} 
-        autoHideDuration={3000} 
+        autoHideDuration={1000} 
         onClose={(_, reason) => {
           if (reason === 'timeout' || reason === 'clickaway') {
             setSnackbar(prev => ({ ...prev, open: false }));
