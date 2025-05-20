@@ -18,6 +18,8 @@ import CustomerDetail from "./pages/Customer/CustomerDetail";
 import SupplierList from "./pages/Supplier/SupplierList";
 import CreateSupplier from "./pages/Supplier/CreateSupplier";
 import SupplierDetail from "./pages/Supplier/SupplierDetail";
+import ExportList from "./pages/Export/ExportList";
+import CreateExport from "./pages/Export/CreateExport";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -194,6 +196,28 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <SupplierDetail />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/exports"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <ExportList />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/exports/create"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <CreateExport />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }

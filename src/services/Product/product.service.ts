@@ -24,6 +24,20 @@ export const getProducts = async (
     return response.data;
   };
 
+  export const getProductList = async (accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+
+    const response = await axios.get('http://localhost:3000/products/list', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  }
+
   export const createProduct = async (
     formData: FormData,
     accessToken: string | null
