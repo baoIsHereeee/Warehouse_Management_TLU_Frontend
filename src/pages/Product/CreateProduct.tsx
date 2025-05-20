@@ -176,7 +176,7 @@ const CreateProduct: React.FC = () => {
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Create Product
+        Create New Product
       </Typography>
 
       <Box display="flex" flexDirection="column" gap={2}>
