@@ -15,6 +15,8 @@ import CreateWarehouse from "./pages/Warehouse/CreateWarehouse";
 import CustomerList from "./pages/Customer/CustomerList";
 import CreateCustomer from "./pages/Customer/CreateCustomer";
 import CustomerDetail from "./pages/Customer/CustomerDetail";
+import SupplierList from "./pages/Supplier/SupplierList";
+import CreateSupplier from "./pages/Supplier/CreateSupplier";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -158,6 +160,28 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <CustomerDetail />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/suppliers"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <SupplierList />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/suppliers/create"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>  
+                <CreateSupplier />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }
