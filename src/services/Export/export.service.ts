@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getExport = async (
+export const getExports = async (
     page = 1,
     limit = 5,
     search = '',
