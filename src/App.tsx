@@ -14,6 +14,8 @@ import WarehouseDetail from "./pages/Warehouse/WarehouseDetail";
 import CreateWarehouse from "./pages/Warehouse/CreateWarehouse";
 import CustomerList from "./pages/Customer/CustomerList";
 import CreateCustomer from "./pages/Customer/CreateCustomer";
+import CustomerDetail from "./pages/Customer/CustomerDetail";
+
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
     <Navbar />
@@ -149,7 +151,18 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+
+        <Route
+          path="/customers/:id"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <CustomerDetail />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </Router>
   );
