@@ -9,6 +9,10 @@ import CategoryList from "./pages/Category/CategoryList";
 import Products from "./pages/Product/ProductList";
 import CreateCategory from "./pages/Category/CreateCategory";
 import CategoryDetail from "./pages/Category/CategoryDetail";
+import WarehouseList from "./pages/Warehouse/WarehouseList";
+import WarehouseDetail from "./pages/Warehouse/WarehouseDetail";
+import CreateWarehouse from "./pages/Warehouse/CreateWarehouse";
+
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -91,6 +95,39 @@ function App() {
           }
         />
 
+        <Route
+          path="/warehouses"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <WarehouseList />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/warehouses/create"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <CreateWarehouse />   
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/warehouses/:id"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <WarehouseDetail />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+      
       </Routes>
     </Router>
   );
