@@ -24,6 +24,19 @@ export const getCustomers = async (
     return response.data;
   };
 
+  export const getCustomerList = async (accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+
+    const response = await axios.get('http://localhost:3000/customers/list', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  };
+
   export const createCustomer = async (categoryData: any, accessToken: string) => {
     const response = await axios.post('http://localhost:3000/customers', categoryData, {
         headers: {
