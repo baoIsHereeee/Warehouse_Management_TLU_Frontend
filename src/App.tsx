@@ -8,6 +8,7 @@ import ProductDetail from "./pages/Product/ProductDetail";
 import CategoryList from "./pages/Category/CategoryList";
 import Products from "./pages/Product/ProductList";
 import CreateCategory from "./pages/Category/CreateCategory";
+import CategoryDetail from "./pages/Category/CategoryDetail";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -74,6 +75,17 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <CreateCategory />  
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/categories/:id"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <CategoryDetail />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }
