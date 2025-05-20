@@ -98,7 +98,7 @@ const CustomerDetail: React.FC = () => {
   }
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ mt: 4, mb: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4">Customer Detail: {customer?.fullname}</Typography>
         <Button variant="outlined" onClick={() => navigate('/customers')}>
