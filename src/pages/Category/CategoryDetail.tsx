@@ -103,7 +103,7 @@ const CategoryDetail: React.FC = () => {
   return (
     <Container sx={{ mt: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Category Detail</Typography>
+        <Typography variant="h4">Category Detail: {category?.name}</Typography>
         <Button variant="outlined" onClick={() => navigate('/categories')}>
           Back to List
         </Button>
