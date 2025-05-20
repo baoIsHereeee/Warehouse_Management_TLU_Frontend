@@ -73,7 +73,7 @@ const CreateCategory: React.FC = () => {
         </Alert>
       )}
 
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ maxWidth: 600 }}>
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ maxWidth: '100%' }}>
         <TextField
           fullWidth
           label="Name"
