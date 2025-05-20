@@ -157,9 +157,12 @@ const ProductDetail: React.FC = () => {
 
   return (
     <Container sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Product Details: {product.name}
-      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="h4">Product Detail: {product?.name}</Typography>
+        <Button variant="outlined" onClick={() => navigate('/products')}>
+          Back to List
+        </Button>
+      </Box>
 
       <Box mb={2} display="flex" justifyContent="center" alignItems="center" position="relative">
         <img
