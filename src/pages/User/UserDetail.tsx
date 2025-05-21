@@ -11,11 +11,10 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-  getRoles,
   addUserRole,
   removeUserRole
 } from '../../services/User/user.service';
-
+import { getRoles } from '../../services/Role/role.service';
 const UserDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
