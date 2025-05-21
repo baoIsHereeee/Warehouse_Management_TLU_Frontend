@@ -20,6 +20,7 @@ import CreateSupplier from "./pages/Supplier/CreateSupplier";
 import SupplierDetail from "./pages/Supplier/SupplierDetail";
 import ExportList from "./pages/Export/ExportList";
 import CreateExport from "./pages/Export/CreateExport";
+import ExportDetail from "./pages/Export/ExportDetail";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -223,7 +224,16 @@ function App() {
           }
         />
         
-
+        <Route
+          path="/exports/:id"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <ExportDetail />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
