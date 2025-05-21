@@ -31,6 +31,10 @@ const Navbar: React.FC = () => {
             Product
           </Button>
 
+          <Button color="inherit" component={Link} to="/imports">
+            Import
+          </Button>
+
           <Button color="inherit" component={Link} to="/exports">
             Export
           </Button>
