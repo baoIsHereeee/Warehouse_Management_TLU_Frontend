@@ -13,6 +13,20 @@ export const getRoles = async (accessToken: string | null) => {
     return response.data;
   };  
 
+  export const getRoleById = async (id: string, accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+    
+    const response = await axios.get(`http://localhost:3000/roles/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  } 
+
   export const createRole = async (role: any, accessToken: string | null) => {
     if (!accessToken) {
       throw new Error('No access token provided');
