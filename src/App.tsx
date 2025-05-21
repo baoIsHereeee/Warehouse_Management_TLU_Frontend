@@ -27,7 +27,7 @@ import ImportDetail from "./pages/Import/ImportDetail";
 import UserList from "./pages/User/UserList";
 import CreateUser from "./pages/User/CreateUser";
 import UserDetail from "./pages/User/UserDetail";
-
+import Dashboard from "./pages/Dashboard/Dashboard";
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
     <Navbar />
@@ -302,6 +302,17 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <UserDetail />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <Dashboard />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }
