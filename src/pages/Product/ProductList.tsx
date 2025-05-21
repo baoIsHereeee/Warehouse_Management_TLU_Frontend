@@ -18,6 +18,8 @@ import {
 import { getProducts } from '../../services/Product/product.service';
 import { useNavigate } from 'react-router-dom'; 
 
+const DEFAULT_IMAGE = 'https://res.cloudinary.com/dw3x8orox/image/upload/v1747628006/b170870007dfa419295d949814474ab2_t_p4cjjq.jpg';
+
 const Product: React.FC = () => {
   const navigate = useNavigate(); 
 
@@ -102,7 +104,7 @@ const Product: React.FC = () => {
                 >
                   <TableCell>
                     <Avatar
-                      src={product.image}
+                      src={product.image || DEFAULT_IMAGE}
                       alt={product.name}
                       variant="rounded"
                       sx={{ width: 50, height: 50 }}
