@@ -61,8 +61,8 @@ const Dashboard: React.FC = () => {
         permissionMap[perm.id] = perm;
       });
       setUniquePermissions(Object.values(permissionMap));
-    } catch (err) {
-      setError('Failed to fetch roles');
+    } catch (err: any) {  
+      setError(err.response?.data?.message || err.message || 'Failed to fetch roles');
       console.error(err);
     }
   };
@@ -83,8 +83,8 @@ const Dashboard: React.FC = () => {
       setNewRoleName('');
       setSuccessMessage('Role created successfully');
       await fetchRoles();
-    } catch (err) {
-      setError('Failed to create role');
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Failed to create role');
       console.error(err);
     }
   };
@@ -101,8 +101,8 @@ const Dashboard: React.FC = () => {
       await deleteRole(roleToDelete, accessToken!);
       setSuccessMessage('Role deleted successfully');
       await fetchRoles();
-    } catch (err) {
-      setError('Failed to delete role');
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Failed to delete role');
       console.error(err);
     } finally {
       setDeleteDialogOpen(false);
@@ -121,8 +121,8 @@ const Dashboard: React.FC = () => {
         setSuccessMessage('Permission removed from role');
       }
       await fetchRoles();
-    } catch (err) {
-      setError('Failed to update role permission');
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Failed to update role permission');
       console.error(err);
     }
   };
