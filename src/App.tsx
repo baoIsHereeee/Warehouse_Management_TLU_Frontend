@@ -24,6 +24,9 @@ import ExportDetail from "./pages/Export/ExportDetail";
 import ImportList from "./pages/Import/ImportList";
 import CreateImport from "./pages/Import/CreateImport";
 import ImportDetail from "./pages/Import/ImportDetail";
+import UserList from "./pages/User/UserList";
+import CreateUser from "./pages/User/CreateUser";
+import UserDetail from "./pages/User/UserDetail";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -270,7 +273,39 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <UserList />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/users/create"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <CreateUser />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route  
+          path="/users/:id"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <UserDetail />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
