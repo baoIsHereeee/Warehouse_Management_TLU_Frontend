@@ -24,6 +24,15 @@ export const getSuppliers = async (
     return response.data;
   };
 
+  export const getSupplierList = async (accessToken: string) => {
+    const response = await axios.get('http://localhost:3000/suppliers/list', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+    return response.data;
+  };
+
   export const createSupplier = async (categoryData: any, accessToken: string) => {
     const response = await axios.post('http://localhost:3000/suppliers', categoryData, {
         headers: {
