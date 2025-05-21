@@ -20,10 +20,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Alert
+  Alert,
+  Checkbox
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getRoles, createRole, deleteRole } from '../../services/Role/role.service';
+import { addRolePermission, removeRolePermission } from '../../services/Role/role.service';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
@@ -39,19 +41,26 @@ const Dashboard: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const [uniquePermissions, setUniquePermissions] = useState<any[]>([]);
+
   const fetchRoles = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
       const data = await getRoles(accessToken!);
-      if (search.trim()) {
-        setRoles(
-          data.filter((role: any) =>
-            role.name.toLowerCase().includes(search.toLowerCase())
-          )
-        );
-      } else {
-        setRoles(data);
-      }
+
+      const filtered = search.trim()
+        ? data.filter((role: any) => role.name.toLowerCase().includes(search.toLowerCase()))
+        : data;
+
+      setRoles(filtered);
+
+      // Lấy danh sách permission duy nhất
+      const allPermissions = data.flatMap((role: any) => role.permissions || []);
+      const permissionMap: Record<string, any> = {};
+      allPermissions.forEach((perm: any) => {
+        permissionMap[perm.id] = perm;
+      });
+      setUniquePermissions(Object.values(permissionMap));
     } catch (err) {
       setError('Failed to fetch roles');
       console.error(err);
@@ -87,7 +96,6 @@ const Dashboard: React.FC = () => {
 
   const handleDelete = async () => {
     if (!roleToDelete) return;
-
     try {
       const accessToken = localStorage.getItem('accessToken');
       await deleteRole(roleToDelete, accessToken!);
@@ -99,6 +107,23 @@ const Dashboard: React.FC = () => {
     } finally {
       setDeleteDialogOpen(false);
       setRoleToDelete(null);
+    }
+  };
+
+  const handleTogglePermission = async (roleId: string, permissionId: string, checked: boolean) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (checked) {
+        await addRolePermission(roleId, permissionId, accessToken);
+        setSuccessMessage('Permission added to role');
+      } else {
+        await removeRolePermission(roleId, permissionId, accessToken);
+        setSuccessMessage('Permission removed from role');
+      }
+      await fetchRoles();
+    } catch (err) {
+      setError('Failed to update role permission');
+      console.error(err);
     }
   };
 
@@ -121,6 +146,7 @@ const Dashboard: React.FC = () => {
         </Button>
       </Box>
 
+      {/* Danh sách role */}
       <TableContainer component={Paper} sx={{ mb: 4 }}>
         <Table>
           <TableHead>
@@ -134,11 +160,7 @@ const Dashboard: React.FC = () => {
               roles.map((role) => (
                 <TableRow
                   key={role.id}
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                    }
-                  }}
+                  sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
                 >
                   <TableCell
                     onClick={() => navigate(`/roles/${role.id}`)}
@@ -162,12 +184,13 @@ const Dashboard: React.FC = () => {
         </Table>
       </TableContainer>
 
+      {/* Form tạo role mới */}
       <Divider sx={{ my: 2 }} />
-
       <Typography variant="h5" gutterBottom>
         Create New Role
       </Typography>
-      <Box display="flex" gap={2}>
+
+      <Box display="flex" gap={2} mb={4}>
         <TextField
           label="Role name"
           fullWidth
@@ -179,6 +202,43 @@ const Dashboard: React.FC = () => {
           Create
         </Button>
       </Box>
+
+      {/* Bảng permission matrix */}
+      <Typography variant="h5" gutterBottom>
+        Role Permission Table
+      </Typography>
+      <TableContainer component={Paper} sx={{ mb: 4, mt: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><strong>Permission</strong></TableCell>
+              {roles.map((role) => (
+                <TableCell key={role.id} align="center"><strong>{role.name}</strong></TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {uniquePermissions.map((perm) => (
+              <TableRow key={perm.id}>
+                <TableCell>{perm.name}</TableCell>
+                {roles.map((role) => {
+                  const isChecked = role.permissions?.some((p: any) => p.id === perm.id);
+                  return (
+                    <TableCell key={role.id} align="center">
+                      <Checkbox
+                        checked={isChecked}
+                        onChange={(e) =>
+                          handleTogglePermission(role.id, perm.id, e.target.checked)
+                        }
+                      />
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       {/* Delete Confirmation Dialog */}
       <Dialog
@@ -196,12 +256,7 @@ const Dashboard: React.FC = () => {
           <Button onClick={() => setDeleteDialogOpen(false)} variant="outlined">
             Cancel
           </Button>
-          <Button
-            onClick={handleDelete}
-            variant="contained"
-            color="error"
-            autoFocus
-          >
+          <Button onClick={handleDelete} variant="contained" color="error" autoFocus>
             Delete
           </Button>
         </DialogActions>
@@ -210,7 +265,7 @@ const Dashboard: React.FC = () => {
       {/* Snackbar Success */}
       <Snackbar
         open={!!successMessage}
-        autoHideDuration={1000}
+        autoHideDuration={1500}
         onClose={() => setSuccessMessage(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
