@@ -79,3 +79,45 @@ export const getUsers = async (
 
     return response.data;
   };
+
+  export const getRoles = async (accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+    
+    const response = await axios.get('http://localhost:3000/roles', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  };  
+
+  export const addUserRole = async (id: string, roleId: string, accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+    
+    const response = await axios.post(`http://localhost:3000/users-roles/${roleId}/${id}`, {}, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  };  
+
+  export const removeUserRole = async (id: string, roleId: string, accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+    
+    const response = await axios.delete(`http://localhost:3000/users-roles/${roleId}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  };  
