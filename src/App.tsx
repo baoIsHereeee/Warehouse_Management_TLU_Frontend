@@ -29,6 +29,7 @@ import CreateUser from "./pages/User/CreateUser";
 import UserDetail from "./pages/User/UserDetail";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import RoleDetail from "./pages/Dashboard/RoleDetail";
+import Report from "./pages/Report/Report";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -326,6 +327,17 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <RoleDetail />  
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/report"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <Report />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }

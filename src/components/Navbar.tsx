@@ -12,6 +12,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import ReportIcon from '@mui/icons-material/Report';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const Navbar: React.FC = () => {
     <AppBar position="static">
       <Toolbar>
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, gap: 1 }}>
-          <Typography variant="h6" noWrap sx={{ marginRight: '30px' }}>
+          <Typography variant="h6" noWrap sx={{ marginRight: '10px' }}>
             Warehouse Management
           </Typography>
 
@@ -73,6 +74,10 @@ const Navbar: React.FC = () => {
 
           <Button component={Link} to="/dashboard" sx={navButtonStyle}>
             <DashboardIcon fontSize="medium" /> Dashboard
+          </Button>
+
+          <Button component={Link} to="/report" sx={navButtonStyle}>
+            <ReportIcon fontSize="medium" /> Report
           </Button>
         </Box>
 
