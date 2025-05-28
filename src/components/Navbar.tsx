@@ -1,6 +1,17 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Button, Typography, Box } from '@mui/material';
+import {
+  AppBar, Toolbar, Button, Typography, Box,
+} from '@mui/material';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
+import CategoryIcon from '@mui/icons-material/Category';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
+import OutboxIcon from '@mui/icons-material/Outbox';
+import GroupIcon from '@mui/icons-material/Group';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -11,48 +22,57 @@ const Navbar: React.FC = () => {
     navigate('/log-in');
   };
 
+  const navButtonStyle = {
+    color: 'inherit',
+    fontSize: '0.75rem', // nhỏ lại
+    textTransform: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 0.5,
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
-        <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, gap: 2 }}>
-          <Typography variant="h6" noWrap>
+        <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, gap: 1 }}>
+          <Typography variant="h6" noWrap sx={{ marginRight: '30px' }}>
             Warehouse Management
           </Typography>
 
-          <Button color="inherit" component={Link} to="/warehouses">
-            Warehouse
+          <Button component={Link} to="/warehouses" sx={navButtonStyle}>
+            <WarehouseIcon fontSize="medium" /> Warehouse
           </Button>
 
-          <Button color="inherit" component={Link} to="/categories">
-            Category
+          <Button component={Link} to="/categories" sx={navButtonStyle}>
+            <CategoryIcon fontSize="medium" /> Category
           </Button>
 
-          <Button color="inherit" component={Link} to="/products">
-            Product
+          <Button component={Link} to="/products" sx={navButtonStyle}>
+            <InventoryIcon fontSize="medium" /> Product
           </Button>
 
-          <Button color="inherit" component={Link} to="/imports">
-            Import
+          <Button component={Link} to="/imports" sx={navButtonStyle}>
+            <MoveToInboxIcon fontSize="medium" /> Import
           </Button>
 
-          <Button color="inherit" component={Link} to="/exports">
-            Export
+          <Button component={Link} to="/exports" sx={navButtonStyle}>
+            <OutboxIcon fontSize="medium" /> Export
           </Button>
 
-          <Button color="inherit" component={Link} to="/customers">
-            Customer
+          <Button component={Link} to="/customers" sx={navButtonStyle}>
+            <GroupIcon fontSize="medium" /> Customer
           </Button>
 
-          <Button color="inherit" component={Link} to="/suppliers">
-            Supplier
+          <Button component={Link} to="/suppliers" sx={navButtonStyle}>
+            <LocalShippingIcon fontSize="medium" /> Supplier
           </Button>
 
-          <Button color="inherit" component={Link} to="/users">
-            User
+          <Button component={Link} to="/users" sx={navButtonStyle}>
+            <AccountBoxIcon fontSize="medium" /> User
           </Button>
 
-          <Button color="inherit" component={Link} to="/dashboard">
-            Dashboard
+          <Button component={Link} to="/dashboard" sx={navButtonStyle}>
+            <DashboardIcon fontSize="medium" /> Dashboard
           </Button>
         </Box>
 
