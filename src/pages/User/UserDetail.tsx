@@ -21,6 +21,7 @@ const UserDetail: React.FC = () => {
 
   const [user, setUser] = useState<any>(null);
   const [fullname, setFullname] = useState('');
+  const [email, setEmail] = useState('');
   const [age, setAge] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,6 +39,7 @@ const UserDetail: React.FC = () => {
       const data = await getUserById(id!, token);
       setUser(data);
       setFullname(data.fullname);
+      setEmail(data.email);
       setAge(data.age.toString());
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load user');
@@ -66,7 +68,7 @@ const UserDetail: React.FC = () => {
       const token = localStorage.getItem('accessToken');
       if (!token) throw new Error('Access token not found');
 
-      await updateUser(id!, { fullname, age: +age }, token);
+      await updateUser(id!, { fullname, email, age: +age }, token);
       setSuccessMessage('User updated successfully');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to update user');
@@ -140,6 +142,14 @@ const UserDetail: React.FC = () => {
         value={fullname}
         onChange={(e) => setFullname(e.target.value)}
         margin="normal"
+      />
+      <TextField
+        label="Email"
+        fullWidth
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        margin="normal"
+        type="email"
       />
       <TextField
         label="Age"
