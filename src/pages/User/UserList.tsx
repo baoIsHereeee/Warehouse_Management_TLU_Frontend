@@ -14,6 +14,8 @@ import {
   Pagination,
   Box,
   Avatar,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getUsers } from '../../services/User/user.service'; // bạn cần có file này
@@ -27,6 +29,7 @@ const UserList: React.FC = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchUsers = async () => {
     try {
@@ -34,8 +37,8 @@ const UserList: React.FC = () => {
       const data = await getUsers(page, 5, search, accessToken);
       setUsers(data.items);
       setTotalPages(data.meta.totalPages);
-    } catch (error) {
-      console.error('Failed to fetch users:', error);
+    } catch (error: any) {
+      setError(error.response?.data?.message || error.message || 'Failed to fetch users');
     }
   };
 
@@ -130,6 +133,17 @@ const UserList: React.FC = () => {
           color="primary"
         />
       </Box>
+
+      <Snackbar
+        open={!!error}
+        autoHideDuration={3000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
