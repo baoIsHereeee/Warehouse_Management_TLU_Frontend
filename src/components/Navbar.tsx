@@ -12,7 +12,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import ReportIcon from '@mui/icons-material/Report';
+import BookIcon from '@mui/icons-material/Book';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
           </Button>
 
           <Button component={Link} to="/report" sx={navButtonStyle}>
-            <ReportIcon fontSize="medium" /> Report
+            <BookIcon fontSize="medium" /> Report
           </Button>
         </Box>
 
