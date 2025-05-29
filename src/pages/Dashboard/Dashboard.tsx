@@ -181,9 +181,15 @@ const Dashboard: React.FC = () => {
                     {role.name}
                   </TableCell>
                   <TableCell align="right">
+                  {['Admin', 'Manager', 'Staff'].includes(role.name) ? (
+                    <Button variant="text" disabled size="small" sx={{ color: 'gray' }}>
+                      System role
+                    </Button>
+                  ) : (
                     <IconButton color="error" onClick={() => openDeleteDialog(role.id)}>
                       <DeleteIcon />
                     </IconButton>
+                  )}
                   </TableCell>
                 </TableRow>
               ))
