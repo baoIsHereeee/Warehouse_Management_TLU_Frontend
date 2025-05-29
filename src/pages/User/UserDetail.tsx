@@ -15,6 +15,7 @@ import {
   removeUserRole
 } from '../../services/User/user.service';
 import { getRoles } from '../../services/Role/role.service';
+
 const UserDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -182,11 +183,15 @@ const UserDetail: React.FC = () => {
             onChange={(e) => setSelectedRoleId(e.target.value)}
             label="Add Role"
           >
-            {availableRoles.map((role) => (
-              <MenuItem key={role.id} value={role.id}>
-                {role.name}
-              </MenuItem>
-            ))}
+            {availableRoles
+              .filter(
+                (role) => !user?.userRoles.some((ur: any) => ur.role.id === role.id)
+              )
+              .map((role) => (
+                <MenuItem key={role.id} value={role.id}>
+                  {role.name}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         <Button variant="contained" onClick={handleAddRole} fullWidth>
@@ -204,13 +209,13 @@ const UserDetail: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {user?.roles.map((role: any) => (
-              <TableRow key={role.id}>
-                <TableCell>{role.name}</TableCell>
+            {user?.userRoles.map((userRole: any) => (
+              <TableRow key={userRole.role.id}>
+                <TableCell>{userRole.role.name}</TableCell>
                 <TableCell align="right">
                   <IconButton
                     color="error"
-                    onClick={() => handleDeleteRole(role.id)}
+                    onClick={() => handleDeleteRole(userRole.role.id)}
                     aria-label="delete"
                   >
                     <DeleteIcon />
