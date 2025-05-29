@@ -26,12 +26,14 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getRoles, createRole, deleteRole } from '../../services/Role/role.service';
 import { addRolePermission, removeRolePermission } from '../../services/Role/role.service';
+import { getPermissions } from '../../services/Role/role.service';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
 
   const [roles, setRoles] = useState<any[]>([]);
+  const [permissions, setPermissions] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [newRoleName, setNewRoleName] = useState('');
 
@@ -41,8 +43,7 @@ const Dashboard: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [uniquePermissions, setUniquePermissions] = useState<any[]>([]);
-
+  // Fetch roles từ API, có filter theo search
   const fetchRoles = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
@@ -53,28 +54,36 @@ const Dashboard: React.FC = () => {
         : data;
 
       setRoles(filtered);
-
-      // Lấy danh sách permission duy nhất
-      const allPermissions = data.flatMap((role: any) => role.permissions || []);
-      const permissionMap: Record<string, any> = {};
-      allPermissions.forEach((perm: any) => {
-        permissionMap[perm.id] = perm;
-      });
-      setUniquePermissions(Object.values(permissionMap));
-    } catch (err: any) {  
+    } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to fetch roles');
       console.error(err);
     }
   };
 
+  // Fetch tất cả permissions trong hệ thống từ API
+  const fetchPermissions = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const data = await getPermissions(accessToken!);
+      setPermissions(data);
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Failed to fetch permissions');
+      console.error(err);
+    }
+  };
+
+  // Khi component mount, gọi fetchRoles và fetchPermissions
   useEffect(() => {
     fetchRoles();
+    fetchPermissions();
   }, []);
 
+  // Search khi click nút hoặc enter
   const handleSearch = () => {
     fetchRoles();
   };
 
+  // Tạo role mới
   const handleCreateRole = async () => {
     if (!newRoleName.trim()) return;
     try {
@@ -89,11 +98,13 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  // Mở dialog xóa
   const openDeleteDialog = (id: string) => {
     setRoleToDelete(id);
     setDeleteDialogOpen(true);
   };
 
+  // Xóa role
   const handleDelete = async () => {
     if (!roleToDelete) return;
     try {
@@ -110,6 +121,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  // Thêm hoặc xóa permission khỏi role
   const handleTogglePermission = async (roleId: string, permissionId: string, checked: boolean) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
@@ -218,7 +230,7 @@ const Dashboard: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {uniquePermissions.map((perm) => (
+            {permissions.map((perm) => (
               <TableRow key={perm.id}>
                 <TableCell>{perm.name}</TableCell>
                 {roles.map((role) => {
