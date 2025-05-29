@@ -46,7 +46,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/warehouse-management" replace />} />
 
-        <Route path="/log-in" element={<LoginPage />} />
+        <Route path="/log-in/:tenantName" element={<LoginPage />} />
+        <Route path="/log-in" element={<Navigate to="/warehouse-management" replace />} />
 
         <Route path="/sign-up" element={<SignUp />} />
 
