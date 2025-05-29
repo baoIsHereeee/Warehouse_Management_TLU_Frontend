@@ -41,7 +41,7 @@ const UserDetail: React.FC = () => {
       setUser(data);
       setFullname(data.fullname);
       setEmail(data.email);
-      setAge(data.age.toString());
+      setAge(data.age?.toString() || '');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load user');
     } finally {
@@ -69,7 +69,11 @@ const UserDetail: React.FC = () => {
       const token = localStorage.getItem('accessToken');
       if (!token) throw new Error('Access token not found');
 
-      await updateUser(id!, { fullname, email, age: +age }, token);
+      await updateUser(id!, { 
+        fullname, 
+        email, 
+        age: age ? +age : null 
+      }, token);
       setSuccessMessage('User updated successfully');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to update user');
@@ -159,6 +163,7 @@ const UserDetail: React.FC = () => {
         onChange={(e) => setAge(e.target.value)}
         margin="normal"
         type="number"
+        placeholder="Enter age (optional)"
       />
 
       <Box display="flex" gap={2} mt={2}>
