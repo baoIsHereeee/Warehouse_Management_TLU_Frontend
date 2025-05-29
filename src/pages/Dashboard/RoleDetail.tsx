@@ -37,13 +37,19 @@ interface Permission {
   description: string;
 }
 
+interface RolePermission {
+  permissionId: number;
+  roleId: string;
+  permission: Permission;
+}
+
 interface Role {
   id: string;
   name: string;
   createdAt: string;
   updatedAt: string;
   users: User[];
-  permissions: Permission[];
+  rolePermissions: RolePermission[];
 }
 
 const RoleDetail: React.FC = () => {
@@ -186,11 +192,11 @@ const RoleDetail: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {role.permissions.length > 0 ? (
-              role.permissions.map((perm) => (
-                <TableRow key={perm.id}>
-                  <TableCell>{perm.name}</TableCell>
-                  <TableCell>{perm.description}</TableCell>
+            {role.rolePermissions.length > 0 ? (
+              role.rolePermissions.map((rp) => (
+                <TableRow key={rp.permissionId}>
+                  <TableCell>{rp.permission.name}</TableCell>
+                  <TableCell>{rp.permission.description}</TableCell>
                 </TableRow>
               ))
             ) : (

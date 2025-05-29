@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
   };
 
   // Thêm hoặc xóa permission khỏi role
-  const handleTogglePermission = async (roleId: string, permissionId: string, checked: boolean) => {
+  const handleTogglePermission = async (roleId: string, permissionId: number, checked: boolean) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
       if (checked) {
@@ -181,15 +181,15 @@ const Dashboard: React.FC = () => {
                     {role.name}
                   </TableCell>
                   <TableCell align="right">
-                  {['Admin', 'Manager', 'Staff'].includes(role.name) ? (
-                    <Button variant="text" disabled size="small" sx={{ color: 'gray' }}>
-                      System role
-                    </Button>
-                  ) : (
-                    <IconButton color="error" onClick={() => openDeleteDialog(role.id)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  )}
+                    {['Admin', 'Manager', 'Staff'].includes(role.name) ? (
+                      <Button variant="text" disabled size="small" sx={{ color: 'gray' }}>
+                        System role
+                      </Button>
+                    ) : (
+                      <IconButton color="error" onClick={() => openDeleteDialog(role.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    )}
                   </TableCell>
                 </TableRow>
               ))
@@ -240,11 +240,14 @@ const Dashboard: React.FC = () => {
               <TableRow key={perm.id}>
                 <TableCell>{perm.name}</TableCell>
                 {roles.map((role) => {
-                  const isChecked = role.permissions?.some((p: any) => p.id === perm.id);
+                  // Kiểm tra permission có trong role.rolePermissions không
+                  const isChecked = role.rolePermissions?.some(
+                    (rp: any) => rp.permissionId === perm.id
+                  );
                   return (
                     <TableCell key={role.id} align="center">
                       <Checkbox
-                        checked={isChecked}
+                        checked={!!isChecked}
                         onChange={(e) =>
                           handleTogglePermission(role.id, perm.id, e.target.checked)
                         }
