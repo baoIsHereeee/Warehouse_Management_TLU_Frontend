@@ -23,7 +23,7 @@ const TenantPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       await checkTenant(tenantName);
-      navigate(`/login/${tenantName}`);
+      navigate(`/log-in/${tenantName}`);
     } catch (err: any) {
       setError(
         err.response?.data?.message || "Error! Please try again!"

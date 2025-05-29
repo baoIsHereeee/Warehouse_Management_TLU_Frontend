@@ -15,17 +15,13 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import axios from "axios";
+import { loginService } from "../../services/Login/login.service";
+import { checkTenant } from "../../services/Tenant/tenant.service";
 
 interface IFormInput {
   email: string;
   password: string;
 }
-
-const checkTenant = async (tenantName: string) => {
-  const response = await axios.get(`http://localhost:3000/tenants/check/${tenantName}`);
-  return response.data; 
-};
 
 const LoginPage: React.FC = () => {
   const { tenantName } = useParams<{ tenantName: string }>();
@@ -60,9 +56,10 @@ const LoginPage: React.FC = () => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const onSubmit: SubmitHandler<IFormInput> = async () => {
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       setError("");
+      await loginService.signIn(data.email, data.password);
       navigate("/products");
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to sign in. Please try again.");
@@ -106,7 +103,7 @@ const LoginPage: React.FC = () => {
           }}
         >
           <Typography variant="h5" gutterBottom>
-            Store {tenantName} does not exist!
+            Store "{tenantName}" does not exist!
           </Typography>
           <Button
             variant="outlined"

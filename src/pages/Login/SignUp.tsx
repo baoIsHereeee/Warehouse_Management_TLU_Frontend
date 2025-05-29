@@ -107,7 +107,7 @@ const SignUp: React.FC = () => {
             sx={{ mt: 2 }}
             onClick={() => navigate("/")}
           >
-            Back to Login
+            Back to Store Selection
           </Button>
         </Box>
       </Paper>
