@@ -30,6 +30,8 @@ import UserDetail from "./pages/User/UserDetail";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import RoleDetail from "./pages/Dashboard/RoleDetail";
 import Report from "./pages/Report/Report";
+import SignUp from "./pages/Login/SignUp";
+import TenantPage from "./pages/Login/Tenant";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -42,9 +44,13 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/log-in" replace />} />
+        <Route path="/" element={<Navigate to="/warehouse-management" replace />} />
 
         <Route path="/log-in" element={<LoginPage />} />
+
+        <Route path="/sign-up" element={<SignUp />} />
+
+        <Route path="/warehouse-management" element={<TenantPage />} />
 
         <Route
           path="/products"
