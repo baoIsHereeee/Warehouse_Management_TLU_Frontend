@@ -140,7 +140,7 @@ const LoginPage: React.FC = () => {
           maxWidth: 400,
         }}
       >
-        <Typography variant="h5" component="h1" gutterBottom>
+        <Typography variant="h5" component="h1" gutterBottom fontWeight="bold">
           Warehouse Management
         </Typography>
         {error && (

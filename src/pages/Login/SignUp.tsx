@@ -59,7 +59,7 @@ const SignUp: React.FC = () => {
           maxWidth: 400,
         }}
       >
-        <Typography variant="h5" component="h1" gutterBottom>
+        <Typography variant="h5" component="h1" gutterBottom fontWeight="bold">
           Warehouse Management
         </Typography>
 
@@ -103,7 +103,7 @@ const SignUp: React.FC = () => {
           <Button
             fullWidth
             variant="outlined"
-            color="secondary"
+            color="primary"
             sx={{ mt: 2 }}
             onClick={() => navigate("/")}
           >

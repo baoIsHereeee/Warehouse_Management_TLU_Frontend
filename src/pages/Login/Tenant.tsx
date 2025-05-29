@@ -58,7 +58,7 @@ const TenantPage: React.FC = () => {
           maxWidth: 400,
         }}
       >
-        <Typography variant="h5" component="h1" gutterBottom>
+        <Typography variant="h5" component="h1" gutterBottom fontWeight="bold">
           Warehouse Management
         </Typography>
 
@@ -102,7 +102,7 @@ const TenantPage: React.FC = () => {
           <Button
             fullWidth
             variant="outlined"
-            color="secondary"
+            color="primary"
             sx={{ mt: 2 }}
             onClick={handleSignUp}
           >
