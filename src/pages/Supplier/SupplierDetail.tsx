@@ -86,7 +86,8 @@ const SupplierDetail: React.FC = () => {
       if (!token) throw new Error('Access token not found');
 
       await deleteSupplier(id!, token);
-      navigate('/suppliers');
+      setSuccessMessage('Supplier deleted successfully');
+      setTimeout(() => navigate('/suppliers'), 1000);
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to delete supplier');
     }

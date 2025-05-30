@@ -24,8 +24,8 @@ export const getSuppliers = async (
     return response.data;
   };
 
-  export const getSupplierList = async (accessToken: string) => {
-    const response = await axios.get('http://localhost:3000/suppliers/list', {
+  export const getSupplierList = async (accessToken: string, tenantId: string) => {
+    const response = await axios.get(`http://localhost:3000/suppliers/list/${tenantId}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },

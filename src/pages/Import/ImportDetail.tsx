@@ -78,10 +78,13 @@ const ImportDetail: React.FC = () => {
         const token = localStorage.getItem('accessToken');
         if (!token || !id) throw new Error('No access token or import ID');
 
+        const tenantId = localStorage.getItem('tenantId');  
+        if (!tenantId) throw new Error('No tenant ID found');
+
         const [importRes, productRes, supplierRes, warehouseRes] = await Promise.all([
           getImportById(id, token),
           getProductList(token),
-          getSupplierList(token),
+          getSupplierList(token, tenantId),
           getWarehouseList(token)
         ]);
 

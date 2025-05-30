@@ -78,10 +78,13 @@ const ExportDetail: React.FC = () => {
         const token = localStorage.getItem('accessToken');
         if (!token || !id) throw new Error('No access token or export ID');
 
+        const tenantId = localStorage.getItem('tenantId');  
+        if (!tenantId) throw new Error('No tenant ID found');
+
         const [exportRes, productRes, customerRes] = await Promise.all([
           getExportById(id, token),
           getProductList(token),
-          getCustomerList(token)
+          getCustomerList(token, tenantId)
         ]);
 
         setDescription(exportRes.description);
