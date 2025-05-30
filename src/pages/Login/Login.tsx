@@ -59,7 +59,7 @@ const LoginPage: React.FC = () => {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       setError("");
-      await loginService.signIn(data.email, data.password);
+      await loginService.signIn(data.email, data.password, tenantName!);
       navigate("/products");
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to sign in. Please try again.");

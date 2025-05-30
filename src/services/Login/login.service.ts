@@ -6,9 +6,9 @@ interface LoginResponse {
 }
 
 export const loginService = {
-  signIn: async (email: string, password: string): Promise<LoginResponse> => {
+  signIn: async (email: string, password: string, tenantName: string): Promise<LoginResponse> => {
     try {
-      const response = await axios.post(`http://localhost:3000/sign-in`, {
+      const response = await axios.post(`http://localhost:3000/sign-in/${tenantName}`, {
         email,
         password,
       });
