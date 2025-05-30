@@ -77,7 +77,7 @@ const CreateImport: React.FC = () => {
         const [productRes, supplierRes, warehouseRes] = await Promise.all([
           getProductList(token, tenantId),
           getSupplierList(token, tenantId),
-          getWarehouseList(token),
+          getWarehouseList(token, tenantId),
         ]);
 
         setProducts(productRes);

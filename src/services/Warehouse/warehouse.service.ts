@@ -24,12 +24,12 @@ export const getWarehouses = async (
     return response.data;
   };
 
-  export const getWarehouseList = async (accessToken: string | null) => {
+  export const getWarehouseList = async (accessToken: string | null, tenantId: string) => {
     if (!accessToken) {
       throw new Error('No access token provided');
     }
 
-    const response = await axios.get('http://localhost:3000/warehouses/list', {
+    const response = await axios.get(`http://localhost:3000/warehouses/list/${tenantId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`, 
       },

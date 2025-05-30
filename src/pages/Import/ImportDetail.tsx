@@ -83,9 +83,9 @@ const ImportDetail: React.FC = () => {
 
         const [importRes, productRes, supplierRes, warehouseRes] = await Promise.all([
           getImportById(id, token),
-          getProductList(token),
+          getProductList(token, tenantId),
           getSupplierList(token, tenantId),
-          getWarehouseList(token)
+          getWarehouseList(token, tenantId)
         ]);
 
         setDescription(importRes.description);
