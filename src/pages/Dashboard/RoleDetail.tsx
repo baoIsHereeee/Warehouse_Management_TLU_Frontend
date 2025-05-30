@@ -24,6 +24,8 @@ import {
 import { useParams, useNavigate } from 'react-router-dom';
 import { getRoleById, updateRole, deleteRole } from '../../services/Role/role.service';
 
+// ... giữ nguyên các import
+
 interface User {
   id: string;
   fullname: string;
@@ -43,12 +45,18 @@ interface RolePermission {
   permission: Permission;
 }
 
+interface UserRole {
+  userId: string;
+  roleId: string;
+  user: User | null;
+}
+
 interface Role {
   id: string;
   name: string;
   createdAt: string;
   updatedAt: string;
-  users: User[];
+  userRoles: UserRole[];
   rolePermissions: RolePermission[];
 }
 
@@ -125,7 +133,7 @@ const RoleDetail: React.FC = () => {
   return (
     <Container sx={{ mt: 4, mb: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Role Detail: {role?.name}</Typography>
+        <Typography variant="h4">Role Detail: {role.name}</Typography>
         <Button variant="outlined" onClick={() => navigate('/dashboard')}>
           Back to List
         </Button>
@@ -162,14 +170,16 @@ const RoleDetail: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {role.users.length > 0 ? (
-              role.users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.fullname}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.age}</TableCell>
-                </TableRow>
-              ))
+            {role.userRoles?.some((ur) => ur.user !== null) ? (
+              role.userRoles.map((ur) =>
+                ur.user ? (
+                  <TableRow key={ur.userId}>
+                    <TableCell>{ur.user.fullname}</TableCell>
+                    <TableCell>{ur.user.email}</TableCell>
+                    <TableCell>{ur.user.age}</TableCell>
+                  </TableRow>
+                ) : null
+              )
             ) : (
               <TableRow>
                 <TableCell colSpan={3} align="center">No users found.</TableCell>
@@ -208,6 +218,7 @@ const RoleDetail: React.FC = () => {
         </Table>
       </TableContainer>
 
+      
       {/* Snackbar Success */}
       <Snackbar
         open={!!successMessage}
