@@ -1,8 +1,16 @@
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 interface LoginResponse {
   accessToken: string;
   refreshToken: string;
+}
+
+interface DecodedToken {
+  id: string;
+  email: string;
+  roles: any[];
+  tenant: string;
 }
 
 export const loginService = {
@@ -15,9 +23,11 @@ export const loginService = {
       
       const { accessToken, refreshToken } = response.data;
       
-      // Store tokens in localStorage
+      const decodedToken = jwtDecode<DecodedToken>(accessToken);
+      
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('tenantId', decodedToken.tenant);
       
       return { accessToken, refreshToken };
     } catch (error) {

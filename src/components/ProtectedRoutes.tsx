@@ -15,24 +15,24 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const accessToken = localStorage.getItem('accessToken');
   const isAuthenticated = accessToken !== null;
 
-  // Check if token is expired
   const isTokenExpired = () => {
     if (!accessToken) return true;
     
     try {
       const decodedToken = jwtDecode<DecodedToken>(accessToken);
-      const currentTime = Date.now() / 1000; // Convert to seconds
+      const currentTime = Date.now() / 1000; 
       
       return decodedToken.exp < currentTime;
     } catch (error) {
       console.error('Error decoding token:', error);
-      return true; // If there's an error decoding, consider token invalid
+      return true;
     }
   };
 
   if (!isAuthenticated || isTokenExpired()) {
-    // Clear the expired token
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tenantId');
     return <Navigate to="/log-in" replace />;
   }
 

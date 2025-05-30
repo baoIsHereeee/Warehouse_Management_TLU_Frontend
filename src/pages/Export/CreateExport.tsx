@@ -70,9 +70,12 @@ const CreateExport: React.FC = () => {
         const token = localStorage.getItem('accessToken');
         if (!token) throw new Error('No access token found');
 
+        const tenantId = localStorage.getItem('tenantId');
+        if (!tenantId) throw new Error('No tenant ID found');
+
         const [productRes, customerRes] = await Promise.all([
           getProductList(token),
-          getCustomerList(token),
+          getCustomerList(token, tenantId),
         ] as const);
 
         setProducts(productRes);
