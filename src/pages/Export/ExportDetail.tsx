@@ -83,7 +83,7 @@ const ExportDetail: React.FC = () => {
 
         const [exportRes, productRes, customerRes] = await Promise.all([
           getExportById(id, token),
-          getProductList(token),
+          getProductList(token, tenantId),
           getCustomerList(token, tenantId)
         ]);
 
