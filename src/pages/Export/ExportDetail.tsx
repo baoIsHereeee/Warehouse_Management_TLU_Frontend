@@ -9,6 +9,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getExportById, updateExport, deleteExport } from '../../services/Export/export.service';
 import { getProductList, getProductById } from '../../services/Product/product.service';
 import { getCustomerList } from '../../services/Customer/customer.service';
+import { getWarehouseList } from '../../services/Warehouse/warehouse.service';
 import { jwtDecode } from 'jwt-decode';
 
 interface DecodedToken {
@@ -20,7 +21,6 @@ interface ExportDetailItem {
   warehouseId: string;
   quantity: number;
   sellingPrice: number;
-  productWarehouses?: Warehouse[];
 }
 
 interface Product {
@@ -62,6 +62,7 @@ const ExportDetail: React.FC = () => {
   const [description, setDescription] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
   const [customerId, setCustomerId] = useState('');
   const [exportDetails, setExportDetails] = useState<ExportDetailItem[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -78,19 +79,21 @@ const ExportDetail: React.FC = () => {
         const token = localStorage.getItem('accessToken');
         if (!token || !id) throw new Error('No access token or export ID');
 
-        const tenantId = localStorage.getItem('tenantId');  
+        const tenantId = localStorage.getItem('tenantId');
         if (!tenantId) throw new Error('No tenant ID found');
 
-        const [exportRes, productRes, customerRes] = await Promise.all([
+        const [exportRes, productRes, customerRes, warehouseRes] = await Promise.all([
           getExportById(id, token),
           getProductList(token, tenantId),
-          getCustomerList(token, tenantId)
+          getCustomerList(token, tenantId),
+          getWarehouseList(token, tenantId)
         ]);
 
         setDescription(exportRes.description);
         setCustomerId(exportRes.customer?.id || '');
         setProducts(productRes);
         setCustomers(customerRes || []);
+        setWarehouses(warehouseRes || []);
         setUpdatedAt(new Date(exportRes.updatedAt).toLocaleString());
         setUser(exportRes.user);
 
@@ -98,8 +101,7 @@ const ExportDetail: React.FC = () => {
           productId: detail.product.id,
           warehouseId: detail.warehouse.id,
           quantity: detail.quantity,
-          sellingPrice: parseFloat(detail.sellingPrice),
-          productWarehouses: [detail.warehouse]
+          sellingPrice: parseFloat(detail.sellingPrice)
         }));
 
         setExportDetails(details);
@@ -112,7 +114,7 @@ const ExportDetail: React.FC = () => {
   }, [id]);
 
   const handleAddDetail = () => {
-    setExportDetails([...exportDetails, { productId: '', warehouseId: '', quantity: 1, sellingPrice: 0, productWarehouses: [] }]);
+    setExportDetails([...exportDetails, { productId: '', warehouseId: '', quantity: 1, sellingPrice: 0 }]);
   };
 
   const handleRemoveDetail = (index: number) => {
@@ -128,14 +130,15 @@ const ExportDetail: React.FC = () => {
     if (field === 'productId') {
       updated[index].productId = value as string;
       updated[index].warehouseId = '';
+
       try {
         const token = localStorage.getItem('accessToken');
         if (!token) throw new Error('No access token');
         const productData = await getProductById(value as string, token);
-        updated[index].productWarehouses = productData.warehouseDetails?.map((wd: any) => wd.warehouse) || [];
+        const defaultWarehouseId = productData?.warehouseDetails?.[0]?.warehouse?.id;
+        updated[index].warehouseId = defaultWarehouseId || '';
       } catch {
         setError('Failed to fetch product warehouse data');
-        updated[index].productWarehouses = [];
       }
     } else {
       updated[index] = {
@@ -185,16 +188,15 @@ const ExportDetail: React.FC = () => {
       setError(err.response?.data?.message || 'Failed to delete export');
     }
   };
-  
 
   return (
     <Container sx={{ mt: 4, mb: 4 }}>
-    <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4">Export Detail</Typography>
         <Button variant="outlined" onClick={() => navigate('/exports')}>
           Back to List
         </Button>
-    </Box>
+      </Box>
 
       <TextField
         label="Description"
@@ -257,9 +259,8 @@ const ExportDetail: React.FC = () => {
             label="Warehouse"
             value={detail.warehouseId}
             onChange={(e) => handleDetailChange(index, 'warehouseId', e.target.value)}
-            disabled={!detail.productWarehouses?.length}
           >
-            {(detail.productWarehouses || []).map(w => (
+            {warehouses.map(w => (
               <MenuItem key={w.id} value={w.id}>{w.name}</MenuItem>
             ))}
           </TextField>
