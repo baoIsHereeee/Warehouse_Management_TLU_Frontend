@@ -281,7 +281,7 @@ const CreateProduct: React.FC = () => {
         open={snackbar.open}
         autoHideDuration={3000}
         onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <Alert
           severity={snackbar.severity}

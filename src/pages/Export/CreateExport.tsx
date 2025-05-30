@@ -74,7 +74,7 @@ const CreateExport: React.FC = () => {
         if (!tenantId) throw new Error('No tenant ID found');
 
         const [productRes, customerRes] = await Promise.all([
-          getProductList(token),
+          getProductList(token, tenantId),
           getCustomerList(token, tenantId),
         ] as const);
 

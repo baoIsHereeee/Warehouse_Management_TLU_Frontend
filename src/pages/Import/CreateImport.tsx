@@ -75,7 +75,7 @@ const CreateImport: React.FC = () => {
         if (!tenantId) throw new Error('No tenant ID found');
 
         const [productRes, supplierRes, warehouseRes] = await Promise.all([
-          getProductList(token),
+          getProductList(token, tenantId),
           getSupplierList(token, tenantId),
           getWarehouseList(token),
         ]);
