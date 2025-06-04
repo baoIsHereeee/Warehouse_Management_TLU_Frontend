@@ -69,8 +69,14 @@ const ImportDetail: React.FC = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [updatedAt, setUpdatedAt] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
+  const [totalValue, setTotalValue] = useState<number>(0);
 
   const userId = getUserIdFromToken();
+
+  const calculateTotalValue = (details: ImportDetailItem[]) => {
+    const total = details.reduce((sum, item) => sum + item.quantity * item.importPrice, 0);
+    setTotalValue(total);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,6 +110,7 @@ const ImportDetail: React.FC = () => {
         }));
 
         setImportDetails(details);
+        calculateTotalValue(details);
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to load import details.');
       }
@@ -113,7 +120,9 @@ const ImportDetail: React.FC = () => {
   }, [id]);
 
   const handleAddDetail = () => {
-    setImportDetails([...importDetails, { productId: '', warehouseId: '', quantity: 1, importPrice: 0 }]);
+    const updated = [...importDetails, { productId: '', warehouseId: '', quantity: 1, importPrice: 0 }];
+    setImportDetails(updated);
+    calculateTotalValue(updated);
   };
 
   const handleRemoveDetail = (index: number) => {
@@ -121,6 +130,7 @@ const ImportDetail: React.FC = () => {
     const updated = [...importDetails];
     updated.splice(index, 1);
     setImportDetails(updated);
+    calculateTotalValue(updated);
   };
 
   const handleDetailChange = (index: number, field: keyof ImportDetailItem, value: string | number) => {
@@ -130,6 +140,7 @@ const ImportDetail: React.FC = () => {
       [field]: field === 'quantity' || field === 'importPrice' ? Number(value) || 0 : value
     };
     setImportDetails(updated);
+    calculateTotalValue(updated);
   };
 
   const handleUpdate = async () => {
@@ -268,6 +279,16 @@ const ImportDetail: React.FC = () => {
           </IconButton>
         </Box>
       ))}
+
+      {/* Tổng giá trị đơn hàng */}
+      <Box display="flex" justifyContent="center" mt={4}>
+        <TextField
+          label="Total Import Value (USD)"
+          value={totalValue.toString()}
+          InputProps={{ readOnly: true }}
+          sx={{ width: 300 }}
+        />
+      </Box>
 
       <Box mt={3} sx={{ display: 'flex', gap: 2 }}>
         <Button variant="contained" color="primary" onClick={handleUpdate}>Update</Button>

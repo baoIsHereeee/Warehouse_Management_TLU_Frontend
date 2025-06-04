@@ -189,6 +189,11 @@ const ExportDetail: React.FC = () => {
     }
   };
 
+  // Tính tổng giá trị xuất
+  const totalValue = exportDetails.reduce((total, item) => {
+    return total + item.quantity * item.sellingPrice;
+  }, 0);
+
   return (
     <Container sx={{ mt: 4, mb: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
@@ -286,6 +291,16 @@ const ExportDetail: React.FC = () => {
           </IconButton>
         </Box>
       ))}
+
+      {/* Hiển thị tổng giá trị xuất */}
+      <Box display="flex" justifyContent="center" mt={3}>
+        <TextField
+          label="Total Export Value (USD)"
+          value={totalValue.toString()}
+          InputProps={{ readOnly: true }}
+          sx={{ width: 300 }}
+        />
+      </Box>
 
       <Box mt={3} sx={{ display: 'flex', gap: 2 }}>
         <Button variant="contained" color="primary" onClick={handleUpdate}>Update</Button>
