@@ -125,10 +125,6 @@ const CreateImport: React.FC = () => {
       setError('Please enter a description');
       return false;
     }
-    if (!supplierId) {
-      setError('Please select a supplier');
-      return false;
-    }
     if (importDetails.some(detail =>
       !detail.productId || !detail.warehouseId || detail.quantity <= 0 || detail.importPrice <= 0
     )) {
@@ -164,6 +160,11 @@ const CreateImport: React.FC = () => {
     }
   };
 
+  const totalAmount = importDetails.reduce(
+    (sum, item) => sum + item.quantity * item.importPrice,
+    0
+  );
+
   return (
     <Container sx={{ mt: 4, mb: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
@@ -191,6 +192,9 @@ const CreateImport: React.FC = () => {
           value={supplierId}
           onChange={(e) => setSupplierId(e.target.value)}
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
           {suppliers.map((supplier) => (
             <MenuItem key={supplier.id} value={supplier.id}>
               {supplier.fullname}
@@ -274,6 +278,15 @@ const CreateImport: React.FC = () => {
           </IconButton>
         </Box>
       ))}
+
+      <Box display="flex" justifyContent="center" mt={3}>
+          <TextField
+            label="Total Export Value (USD)"
+            value={totalAmount.toString()}
+            InputProps={{ readOnly: true }}
+            sx={{ width: 300 }}
+          />
+      </Box>
 
       <Box mt={3} sx={{ display: 'flex', gap: 2 }}>
         <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>

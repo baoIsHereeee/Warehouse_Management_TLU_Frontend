@@ -41,7 +41,6 @@ interface Customer {
 const getUserIdFromToken = (): number | null => {
   const token = localStorage.getItem('accessToken');
   if (!token) return null;
-
   try {
     const decoded = jwtDecode<DecodedToken>(token);
     return decoded.id;
@@ -59,6 +58,7 @@ const CreateExport: React.FC = () => {
   const [exportDetails, setExportDetails] = useState<ExportDetail[]>([
     { productId: '', warehouseId: '', quantity: 1, sellingPrice: 0, productWarehouses: [] },
   ]);
+  const [totalAmount, setTotalAmount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -69,7 +69,6 @@ const CreateExport: React.FC = () => {
       try {
         const token = localStorage.getItem('accessToken');
         if (!token) throw new Error('No access token found');
-
         const tenantId = localStorage.getItem('tenantId');
         if (!tenantId) throw new Error('No tenant ID found');
 
@@ -88,11 +87,20 @@ const CreateExport: React.FC = () => {
     fetchData();
   }, []);
 
+  const calculateTotalAmount = (details: ExportDetail[]) => {
+    const total = details.reduce((sum, item) => {
+      return sum + (item.quantity * item.sellingPrice);
+    }, 0);
+    setTotalAmount(total);
+  };
+
   const handleAddDetail = () => {
-    setExportDetails([
+    const updated = [
       ...exportDetails,
       { productId: '', warehouseId: '', quantity: 1, sellingPrice: 0, productWarehouses: [] },
-    ]);
+    ];
+    setExportDetails(updated);
+    calculateTotalAmount(updated);
   };
 
   const handleRemoveDetail = (index: number) => {
@@ -100,6 +108,7 @@ const CreateExport: React.FC = () => {
     const updated = [...exportDetails];
     updated.splice(index, 1);
     setExportDetails(updated);
+    calculateTotalAmount(updated);
   };
 
   const handleDetailChange = async (index: number, field: keyof ExportDetail, value: string | number) => {
@@ -127,6 +136,7 @@ const CreateExport: React.FC = () => {
     }
 
     setExportDetails(updated);
+    calculateTotalAmount(updated);
   };
 
   const validateForm = (): boolean => {
@@ -210,11 +220,7 @@ const CreateExport: React.FC = () => {
       </Typography>
 
       <Box mb={2}>
-        <Button
-          variant="outlined"
-          startIcon={<AddIcon />}
-          onClick={handleAddDetail}
-        >
+        <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddDetail}>
           Add Detail
         </Button>
       </Box>
@@ -281,6 +287,15 @@ const CreateExport: React.FC = () => {
           </IconButton>
         </Box>
       ))}
+
+        <Box display="flex" justifyContent="center" mt={3}>
+          <TextField
+            label="Total Export Value (USD)"
+            value={totalAmount.toString()}
+            InputProps={{ readOnly: true }}
+            sx={{ width: 300 }}
+          />
+        </Box>
 
       <Box mt={3}>
         <Button variant="contained" color="primary" onClick={handleSubmit}>
