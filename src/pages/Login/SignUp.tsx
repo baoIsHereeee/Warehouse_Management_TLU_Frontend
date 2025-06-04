@@ -26,6 +26,7 @@ interface ITenantInfo {
 
 const SignUp: React.FC = () => {
   const [tenantName, setTenantName] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,7 +39,7 @@ const SignUp: React.FC = () => {
     setError("");
     setIsSubmitting(true);
     try {
-      const response = await createTenant(tenantName);
+      const response = await createTenant({ name: tenantName, email });
       setSuccess(response.message);
       setTenantInfo(response.tenant);
       setUserInfo(response.user);
@@ -173,8 +174,16 @@ const SignUp: React.FC = () => {
             value={tenantName}
             onChange={(e) => setTenantName(e.target.value)}
             required
-            error={!!error}
-            helperText={error}
+          />
+
+          <TextField
+            label="Email"
+            fullWidth
+            margin="normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            type="email"
           />
 
           <Button
@@ -183,7 +192,7 @@ const SignUp: React.FC = () => {
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
-            disabled={isSubmitting || !tenantName}
+            disabled={isSubmitting || !tenantName || !email}
           >
             {isSubmitting ? "Creating..." : "Create Store"}
           </Button>
