@@ -97,16 +97,57 @@ export const getWarehouses = async (
     return response.data;
   };
 
-  export const getWarehouseTransferList = async (accessToken: string | null) => {
+  export const getWarehouseTransferList = async (
+      page = 1,
+      limit = 5,
+      search = '',
+      accessToken: string | null = null
+    ) => {
+      if (!accessToken) {
+        throw new Error('No access token provided');
+      }
+    
+      const response = await axios.get('http://localhost:3000/warehouses/transfers', {
+        params: {
+          page,
+          limit,
+          search,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    
+      return response.data;
+  };
+
+  export const getWarehouseTransferById = async (id: string, accessToken: string | null) => {
     if (!accessToken) {
       throw new Error('No access token provided');
     }
 
-    const response = await axios.get('http://localhost:3000/warehouses/transfers', {
+    const response = await axios.get(`http://localhost:3000/warehouses/transfers/${id}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
     });
 
     return response.data;
-  }
+  };
+
+  export const createWarehouseTransfer = async (
+    warehouseTransferData: any,
+    accessToken: string | null
+  ) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+
+    const response = await axios.post('http://localhost:3000/warehouses/transfers', warehouseTransferData, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
+    return response.data;
+  };

@@ -33,6 +33,7 @@ import Report from "./pages/Report/Report";
 import SignUp from "./pages/Login/SignUp";
 import TenantPage from "./pages/Login/Tenant";
 import WarehouseTransferDetail from "./pages/Warehouse/WarehouseTransferDetail";
+import CreateWarehouseTransfer from "./pages/Warehouse/CreateWarehouseTransfer";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -357,6 +358,17 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <WarehouseTransferDetail />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/warehouse-transfers/create"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <CreateWarehouseTransfer />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }

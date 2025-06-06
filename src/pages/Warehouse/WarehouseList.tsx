@@ -16,8 +16,7 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material';
-import { getWarehouses } from '../../services/Warehouse/warehouse.service';
-import { getWarehouseTransferList } from '../../services/Warehouse/warehouse.service';
+import { getWarehouses, getWarehouseTransferList } from '../../services/Warehouse/warehouse.service';
 import { useNavigate } from 'react-router-dom';
 
 const LIMIT = 5;
@@ -39,6 +38,7 @@ const WarehouseList: React.FC = () => {
   const [transferTotalPages, setTransferTotalPages] = useState(1);
   const [transferLoading, setTransferLoading] = useState(false);
   const [transferError, setTransferError] = useState<string | null>(null);
+  const [transferSearch, setTransferSearch] = useState('');
 
   // Fetch Warehouses
   const fetchWarehouses = async () => {
@@ -66,7 +66,7 @@ const WarehouseList: React.FC = () => {
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) throw new Error('No access token');
 
-      const data = await getWarehouseTransferList(accessToken);
+      const data = await getWarehouseTransferList(transferPage, LIMIT, transferSearch, accessToken);
       setTransfers(data.items || []);
       setTransferTotalPages(data.meta?.totalPages || 1);
     } catch (err: any) {
@@ -87,6 +87,11 @@ const WarehouseList: React.FC = () => {
   const handleSearch = () => {
     setPage(1);
     fetchWarehouses();
+  };
+
+  const handleTransferSearch = () => {
+    setTransferPage(1);
+    fetchTransfers();
   };
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
@@ -178,6 +183,22 @@ const WarehouseList: React.FC = () => {
           Warehouse Transfer List
         </Typography>
 
+        <Box display="flex" gap={2} mb={3}>
+          <TextField
+            sx={{ flexGrow: 1 }}
+            label="Search transfers..."
+            value={transferSearch}
+            onChange={(e) => setTransferSearch(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleTransferSearch()}
+          />
+          <Button variant="contained" onClick={handleTransferSearch}>
+            Search
+          </Button>
+          <Button variant="outlined" color="primary" onClick={() => navigate('/warehouse-transfers/create')}>
+            Create
+          </Button>
+        </Box>
+
         {transferLoading ? (
           <Box display="flex" justifyContent="center" mt={4}>
             <CircularProgress />
@@ -195,19 +216,19 @@ const WarehouseList: React.FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {transfers.map((transfer) => (
-                  <TableRow
-                    key={transfer.id}
-                    sx={{
-                      cursor: 'pointer',
-                      '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-                    }}
-                    onClick={() => navigate(`/warehouse-transfers/${transfer.id}`)}
-                  >
-                    <TableCell>{transfer.description}</TableCell>
-                    <TableCell>{new Date(transfer.createdAt).toLocaleString()}</TableCell>
-                  </TableRow>
-                ))}
+                  {transfers.map((transfer) => (
+                    <TableRow
+                      key={transfer.id}
+                      sx={{
+                        cursor: 'pointer',
+                        '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+                      }}
+                      onClick={() => navigate(`/warehouse-transfers/${transfer.id}`)}
+                    >
+                      <TableCell>{transfer.description}</TableCell>
+                      <TableCell>{new Date(transfer.createdAt).toLocaleString()}</TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
