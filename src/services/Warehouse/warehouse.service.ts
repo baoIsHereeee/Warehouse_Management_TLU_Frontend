@@ -96,3 +96,17 @@ export const getWarehouses = async (
 
     return response.data;
   };
+
+  export const getWarehouseTransferList = async (accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+
+    const response = await axios.get('http://localhost:3000/warehouses/transfers', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
+    return response.data;
+  }

@@ -32,6 +32,7 @@ import RoleDetail from "./pages/Dashboard/RoleDetail";
 import Report from "./pages/Report/Report";
 import SignUp from "./pages/Login/SignUp";
 import TenantPage from "./pages/Login/Tenant";
+import WarehouseTransferDetail from "./pages/Warehouse/WarehouseTransferDetail";
 
 const LayoutWithNavbar: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
@@ -345,6 +346,17 @@ function App() {
             <ProtectedRoute>
               <LayoutWithNavbar>
                 <Report />
+              </LayoutWithNavbar>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/warehouse-transfers/:id"
+          element={
+            <ProtectedRoute>
+              <LayoutWithNavbar>
+                <WarehouseTransferDetail />
               </LayoutWithNavbar>
             </ProtectedRoute>
           }
