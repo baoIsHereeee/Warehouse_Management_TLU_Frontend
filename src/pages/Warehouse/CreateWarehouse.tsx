@@ -53,7 +53,7 @@ const CreateWarehouse: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Ngăn reload trang
+    e.preventDefault(); 
 
     if (!validateForm()) return;
 
@@ -73,9 +73,12 @@ const CreateWarehouse: React.FC = () => {
 
   return (
     <Container sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Create New Warehouse
-      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="h4">Create New Warehouse</Typography>
+        <Button variant="outlined" onClick={() => navigate('/warehouses')}>
+          Back to List
+        </Button>
+      </Box>
 
       <Box
         component="form"

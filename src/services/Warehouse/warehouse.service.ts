@@ -151,3 +151,31 @@ export const getWarehouses = async (
 
     return response.data;
   };
+
+  export const updateWarehouseTransfer = async (id: string, warehouseTransferData: any, accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+
+    const response = await axios.put(`http://localhost:3000/warehouses/transfers/${id}`, warehouseTransferData, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
+    return response.data;
+  };
+
+  export const deleteWarehouseTransfer = async (id: string, accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('No access token provided');
+    }
+
+    const response = await axios.delete(`http://localhost:3000/warehouses/transfers/${id}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
+    return response.data;
+  };

@@ -144,16 +144,19 @@ const CreateWarehouseTransfer: React.FC = () => {
       await createWarehouseTransfer(payload, token);
       setSuccess('Warehouse transfer created successfully!');
       setTimeout(() => navigate('/warehouses'), 1500);
-    } catch (err) {
-      setError('Failed to create warehouse transfer');
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Failed to create warehouse transfer');
     }
   };
 
   return (
     <Container sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Create Warehouse Transfer
-      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="h4">Create Warehouse Transfer</Typography>
+        <Button variant="outlined" onClick={() => navigate('/warehouses')}>
+          Back to List
+        </Button>
+      </Box>
 
       <Box mb={3}>
         <TextField
