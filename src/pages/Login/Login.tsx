@@ -15,7 +15,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { loginService } from "../../services/Login/login.service";
+import { loginService } from "../../services/Auth/auth.service";
 import { checkTenant } from "../../services/Tenant/tenant.service";
 
 interface IFormInput {

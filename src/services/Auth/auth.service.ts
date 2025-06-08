@@ -35,4 +35,15 @@ export const loginService = {
     }
   },
 };
+
+export const renewAccessToken = async (refreshToken: string): Promise<{ accessToken: string }> => {
+  try {
+    const response = await axios.post('http://localhost:3000/renew-access-token', {
+      refreshToken
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}; 
   
