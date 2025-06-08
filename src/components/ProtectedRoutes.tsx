@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { renewAccessToken } from '../services/Auth/auth.service';
+import { renewAccessToken, signOut } from '../services/Auth/auth.service';
 import { useEffect, useState } from 'react';
 
 interface ProtectedRouteProps {
@@ -17,11 +17,20 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('tenantId');
-    setIsAuthenticated(false);
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (refreshToken) {
+        await signOut(refreshToken);
+      }
+    } catch (error) {
+      console.error('Error during sign out:', error);
+    } finally {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('tenantId');
+      setIsAuthenticated(false);
+    }
   };
 
   const isTokenExpired = (token: string) => {
