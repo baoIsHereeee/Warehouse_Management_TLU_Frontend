@@ -48,13 +48,13 @@ export const renewAccessToken = async (refreshToken: string): Promise<{ accessTo
 };
 
 export const signOut = async (refreshToken: string): Promise<{ message: string }> => {
-  console.log('%c[SignOut] Starting sign out process...', 'color: #2196F3; font-weight: bold');
   try {
-    const response = await axios.post('http://localhost:3000/sign-out', { refreshToken });
-    console.log('%c[SignOut] Success:', 'color: #4CAF50; font-weight: bold', response.data);
+    const response = await axios.post('http://localhost:3000/sign-out', {
+      refreshToken
+    });
     return response.data;
   } catch (error) {
-    console.error('%c[SignOut] Failed:', 'color: #F44336; font-weight: bold', error);
+    console.error('Sign out request failed:', error);
     throw error;
   }
 }; 

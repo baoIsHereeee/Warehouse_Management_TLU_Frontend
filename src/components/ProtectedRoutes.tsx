@@ -18,19 +18,26 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogout = async () => {
-    try {
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (refreshToken) {
-        await signOut(refreshToken);
-      }
-    } catch (error) {
-      console.error('Error during sign out:', error);
-    } finally {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('tenantId');
-      setIsAuthenticated(false);
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) {
+      clearLocalStorage();
+      return;
     }
+
+    try {
+      await signOut(refreshToken);
+    } catch (error) {
+      console.error('%c[Logout] Error during sign out:', error);
+    } finally {
+      clearLocalStorage();
+    }
+  };
+
+  const clearLocalStorage = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tenantId');
+    setIsAuthenticated(false);
   };
 
   const isTokenExpired = (token: string) => {
